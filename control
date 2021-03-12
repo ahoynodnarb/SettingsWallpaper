@@ -1,0 +1,9 @@
+Package: com.popsicletreehouse.settingswallpaper
+Name: SettingsWallpaper
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: Change your settings background to your wallpaper
+Maintainer: PopsicleTreehouse
+Author: PopsicleTreehouse
+Section: Tweaks
+Depends: mobilesubstrate (>= 0.9.5000)
