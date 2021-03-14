@@ -26,12 +26,6 @@
 		</dict>
 		<dict>
 			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>Wallpaper Type</string>
-		</dict>
-		<dict>
-			<key>cell</key>
             <string>PSSegmentCell</string>
             <key>defaults</key>
             <string>com.popsicletreehouse.settingswallpaperprefs</string>
@@ -73,6 +67,30 @@
 			<string>com.popsicletreehouse.settingswallpaper.prefschanged</string>
 		</dict>
 		<dict>
+            <key>cell</key>
+            <string>PSSegmentCell</string>
+            <key>defaults</key>
+            <string>com.popsicletreehouse.settingswallpaperprefs</string>
+            <key>default</key>
+            <string>0</string>
+            <key>key</key>
+            <string>blurType</string>
+            <key>validValues</key>
+            <array>
+                <string>0</string>
+                <string>1</string>
+                <string>2</string>
+            </array>
+            <key>validTitles</key>
+            <array>
+            	<string>Auto</string>
+                <string>Dark</string>
+                <string>Light</string>
+            </array>
+			<key>PostNotification</key>
+			<string>com.popsicletreehouse.settingswallpaper.prefschanged</string>
+        </dict>
+		<dict>
 			<key>cell</key>
 			<string>PSSliderCell</string>
 			<key>default</key>
@@ -88,7 +106,7 @@
 			<key>showValue</key>
 			<true/>
 			<key>label</key>
-			<string>Dock blur intensity</string>
+			<string>Background Blur Intensity</string>
 			<key>PostNotification</key>
 			<string>com.popsicletreehouse.settingswallpaper.prefschanged</string>
 		</dict>
@@ -96,7 +114,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Github</string>
+			<string>Credits</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -105,6 +123,14 @@
 			<string>Github</string>
 			<key>action</key>
 			<string>openGithub</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Reddit</string>
+			<key>action</key>
+			<string>openReddit</string>
 		</dict>
 	</array>
 	<key>title</key>
