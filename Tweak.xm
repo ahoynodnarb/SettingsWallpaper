@@ -1,5 +1,4 @@
 #import "SettingsWallpaper.h"
-#include "substrate.h"
 
 @interface PSTableCell : UIView
 - (void) applySWChanges;
