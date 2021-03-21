@@ -101,12 +101,54 @@
 			<string>blurIntensity</string>
 			<key>min</key>
 			<real>0</real>
-			<key>max></key>
+			<key>max</key>
 			<real>1</real>
 			<key>showValue</key>
 			<true/>
 			<key>label</key>
 			<string>Background Blur Intensity</string>
+			<key>PostNotification</key>
+			<string>com.popsicletreehouse.settingswallpaper.prefschanged</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Cells</string>
+			<key>footerText</key>
+			<string>Does not require a respring. Updates Immediately</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.popsicletreehouse.settingswallpaperprefs</string>
+			<key>key</key>
+			<string>cellBGAlphaEnabled</string>
+			<key>label</key>
+			<string>Enable Cell Alpha</string>
+			<key>PostNotification</key>
+			<string>com.popsicletreehouse.settingswallpaper.prefschanged</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSliderCell</string>
+			<key>default</key>
+			<real>1</real>
+			<key>defaults</key>
+			<string>com.popsicletreehouse.settingswallpaperprefs</string>
+			<key>key</key>
+			<string>cellBackgroundAlpha</string>
+			<key>min</key>
+			<real>0</real>
+			<key>max</key>
+			<real>1</real>
+			<key>showValue</key>
+			<true/>
+			<key>label</key>
+			<string>Cell Background Alpha</string>
 			<key>PostNotification</key>
 			<string>com.popsicletreehouse.settingswallpaper.prefschanged</string>
 		</dict>
