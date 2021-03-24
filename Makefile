@@ -1,4 +1,4 @@
-THEOS_DEVICE_IP = localhost -p 2222
+PREFIX=$(THEOS)/toolchain/Xcode.xctoolchain/usr/bin/
 
 INSTALL_TARGET_PROCESSES = SpringBoard
 
