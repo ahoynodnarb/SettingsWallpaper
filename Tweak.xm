@@ -1,13 +1,18 @@
 #import "SettingsWallpaper.h"
 
+@interface PSTableCell : UIView
+- (void) applySWChanges;
+@end
 static void refreshPrefs()
 {
     NSDictionary *bundleDefaults = [[NSUserDefaults standardUserDefaults] persistentDomainForName:@"com.popsicletreehouse.settingswallpaperprefs"];
     enabled = [bundleDefaults objectForKey:@"isEnabled"] ? [[bundleDefaults objectForKey:@"isEnabled"] boolValue] : YES;
     blur = [bundleDefaults objectForKey:@"isBlur"] ? [[bundleDefaults objectForKey:@"isBlur"]boolValue] : YES;
+	alpha = [bundleDefaults objectForKey:@"cellBGAlphaEnabled"] ? [[bundleDefaults objectForKey: @"cellBGAlphaEnabled"] boolValue] : YES;
 	blurType = [bundleDefaults objectForKey:@"blurType"] ? [[bundleDefaults objectForKey:@"blurType"]intValue] : 0;
     intensity = [bundleDefaults objectForKey:@"blurIntensity"] ? [[bundleDefaults objectForKey:@"blurIntensity"]floatValue] : 1.0f;
 	wallpaperMode = [bundleDefaults objectForKey:@"wallpaperMode"] ? [[bundleDefaults objectForKey:@"wallpaperMode"]intValue] : 0;
+	cellAlpha = [bundleDefaults objectForKey: @"cellBackgroundAlpha"] ? [[bundleDefaults objectForKey: @"cellBackgroundAlpha"] floatValue] : 1.0f;
 }
 
 static void PreferencesChangedCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo)
@@ -31,13 +36,38 @@ static void PreferencesChangedCallback(CFNotificationCenterRef center, void *obs
 			blurEffectView.alpha = intensity;
 			[self.backgroundView addSubview:blurEffectView];
 		}
+
 		if([[NSFileManager defaultManager] fileExistsAtPath:[wallpaperStrings objectAtIndex:wallpaperMode]])
 			[backgroundImageView setImage:[UIImage imageWithContentsOfFile:[wallpaperStrings objectAtIndex:wallpaperMode]]];
 		else
 			[backgroundImageView setImage:[UIImage imageWithContentsOfFile:[wallpaperStrings objectAtIndex:!wallpaperMode]]];
 	}
 }
+
 %end
+
+%hook PSTableCell
+%new
+- (void) applySWChanges {
+	if (alpha) {
+		CGFloat red = 0.0, green = 0.0, blue = 0.0, dAlpha = 0.0;
+		[self.backgroundColor getRed:&red green:&green blue:&blue alpha:&dAlpha];
+		self.backgroundColor = [[UIColor alloc] initWithRed:red green:green blue:blue alpha:cellAlpha];
+	}
+}
+- (void) didMoveToWindow {
+	%orig;
+	[self applySWChanges];
+}
+
+
+-(void) refreshCellContentsWithSpecifier:(id)arg1 {
+	%orig(arg1);
+	[self applySWChanges];
+}
+
+%end
+
 
 %ctor {
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback) PreferencesChangedCallback, CFSTR("com.popsicletreehouse.settingswallpaper.prefschanged"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);

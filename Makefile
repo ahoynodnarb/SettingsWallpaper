@@ -7,7 +7,7 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = SettingsWallpaper
 
-SettingsWallpaper_FILES = Tweak.x
+SettingsWallpaper_FILES = Tweak.xm
 SettingsWallpaper_CFLAGS = -fobjc-arc
 
 include $(THEOS_MAKE_PATH)/tweak.mk
