@@ -4,6 +4,9 @@
  *   Feel free to contribute!
  */
 #import <UIKit/UIKit.h>
+@interface PSTableCell : UIView
+- (void)applySWChanges;
+@end
 BOOL enabled = YES;
 BOOL blur = YES;
 BOOL alpha = YES;

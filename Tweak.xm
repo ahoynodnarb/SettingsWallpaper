@@ -1,8 +1,7 @@
 #import "SettingsWallpaper.h"
 
-@interface PSTableCell : UIView
-- (void) applySWChanges;
-@end
+extern "C" CFArrayRef CPBitmapCreateImagesFromData(CFDataRef cpbitmap, void*, int, void*);
+
 static void refreshPrefs()
 {
     NSDictionary *bundleDefaults = [[NSUserDefaults standardUserDefaults] persistentDomainForName:@"com.popsicletreehouse.settingswallpaperprefs"];
@@ -23,7 +22,7 @@ static void PreferencesChangedCallback(CFNotificationCenterRef center, void *obs
 %hook UITableView
 -(void)didMoveToSuperview {
 	if(enabled && !self.backgroundView) {
-		NSArray *wallpaperStrings = @[@"/var/mobile/Library/SpringBoard/LockBackgroundThumbnail.jpg", @"/var/mobile/Library/SpringBoard/HomeBackgroundThumbnail.jpg"];
+		NSArray *wallpaperStrings = @[@"/var/mobile/Library/SpringBoard/LockBackground.cpbitmap", @"/var/mobile/Library/SpringBoard/HomeBackground.cpbitmap"];
 		UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.backgroundView.bounds];
 		[backgroundImageView setClipsToBounds:YES];
         [backgroundImageView setContentMode: UIViewContentModeScaleAspectFill];
@@ -36,11 +35,12 @@ static void PreferencesChangedCallback(CFNotificationCenterRef center, void *obs
 			blurEffectView.alpha = intensity;
 			[self.backgroundView addSubview:blurEffectView];
 		}
-
-		if([[NSFileManager defaultManager] fileExistsAtPath:[wallpaperStrings objectAtIndex:wallpaperMode]])
-			[backgroundImageView setImage:[UIImage imageWithContentsOfFile:[wallpaperStrings objectAtIndex:wallpaperMode]]];
-		else
-			[backgroundImageView setImage:[UIImage imageWithContentsOfFile:[wallpaperStrings objectAtIndex:!wallpaperMode]]];
+		BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:[wallpaperStrings objectAtIndex:wallpaperMode]];
+		NSData *wallpaperData = fileExists ? [NSData dataWithContentsOfFile:[wallpaperStrings objectAtIndex:wallpaperMode]] : [NSData dataWithContentsOfFile:[wallpaperStrings objectAtIndex:!wallpaperMode]];
+		CFDataRef wallpaperDataRef = (__bridge CFDataRef)wallpaperData;
+		NSArray *imageArray = (__bridge NSArray *)CPBitmapCreateImagesFromData(wallpaperDataRef, NULL, 1, NULL);
+		UIImage *wallpaperImage = [UIImage imageWithCGImage:(CGImageRef)imageArray[0]];
+		[backgroundImageView setImage:wallpaperImage];
 	}
 }
 
@@ -48,20 +48,20 @@ static void PreferencesChangedCallback(CFNotificationCenterRef center, void *obs
 
 %hook PSTableCell
 %new
-- (void) applySWChanges {
+-(void)applySWChanges {
 	if (alpha) {
 		CGFloat red = 0.0, green = 0.0, blue = 0.0, dAlpha = 0.0;
 		[self.backgroundColor getRed:&red green:&green blue:&blue alpha:&dAlpha];
 		self.backgroundColor = [[UIColor alloc] initWithRed:red green:green blue:blue alpha:cellAlpha];
 	}
 }
-- (void) didMoveToWindow {
+-(void)didMoveToWindow {
 	%orig;
 	[self applySWChanges];
 }
 
 
--(void) refreshCellContentsWithSpecifier:(id)arg1 {
+-(void)refreshCellContentsWithSpecifier:(id)arg1 {
 	%orig(arg1);
 	[self applySWChanges];
 }
